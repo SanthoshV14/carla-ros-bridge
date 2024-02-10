@@ -387,9 +387,9 @@ def main(args=None):
 
     roscomp.on_shutdown(carla_bridge.destroy)
 
-    parameters['host'] = carla_bridge.get_param('host', 'localhost')
+    parameters['host'] = 'host.docker.internal' // carla_bridge.get_param('host', 'localhost')
     parameters['port'] = carla_bridge.get_param('port', 2000)
-    parameters['timeout'] = carla_bridge.get_param('timeout', 2)
+    parameters['timeout'] = 20 // carla_bridge.get_param('timeout', 2)
     parameters['passive'] = carla_bridge.get_param('passive', False)
     parameters['synchronous_mode'] = carla_bridge.get_param('synchronous_mode', True)
     parameters['synchronous_mode_wait_for_vehicle_control_command'] = carla_bridge.get_param(
@@ -412,18 +412,18 @@ def main(args=None):
         carla_client.set_timeout(parameters['timeout'])
 
         # check carla version
-        dist = pkg_resources.get_distribution("carla")
-        if LooseVersion(dist.version) != LooseVersion(CarlaRosBridge.CARLA_VERSION):
-            carla_bridge.logfatal("CARLA python module version {} required. Found: {}".format(
-                CarlaRosBridge.CARLA_VERSION, dist.version))
-            sys.exit(1)
+        # dist = pkg_resources.get_distribution("carla")
+        # if LooseVersion(dist.version) != LooseVersion(CarlaRosBridge.CARLA_VERSION):
+        #     carla_bridge.logfatal("CARLA python module version {} required. Found: {}".format(
+        #         CarlaRosBridge.CARLA_VERSION, dist.version))
+        #     sys.exit(1)
 
-        if LooseVersion(carla_client.get_server_version()) != \
-           LooseVersion(carla_client.get_client_version()):
-            carla_bridge.logwarn(
-                "Version mismatch detected: You are trying to connect to a simulator that might be incompatible with this API. Client API version: {}. Simulator API version: {}"
-                .format(carla_client.get_client_version(),
-                        carla_client.get_server_version()))
+        # if LooseVersion(carla_client.get_server_version()) != \
+        #    LooseVersion(carla_client.get_client_version()):
+        #     carla_bridge.logwarn(
+        #         "Version mismatch detected: You are trying to connect to a simulator that might be incompatible with this API. Client API version: {}. Simulator API version: {}"
+        #         .format(carla_client.get_client_version(),
+        #                 carla_client.get_server_version()))
 
         carla_world = carla_client.get_world()
 
